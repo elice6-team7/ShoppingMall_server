@@ -71,13 +71,34 @@ class ProductService {
   }
 
   // 상품 전체 조회
-  async getProducts() {
+  async getProducts(countPerPage, pageNo) {
     const products = await this.productModel.find({}).populate("categoryId");
+
+    if (pageNo > 0) {
+      const totalCount = products.length;
+      const startNo = (pageNo - 1) * countPerPage;
+      let endNo = pageNo * countPerPage - 1;
+      if (endNo > totalCount - 1) {
+        endNo = totalCount - 1;
+      }
+
+      const productsPerPage = [];
+      if (startNo < totalCount) {
+        for (let idx = startNo; idx <= endNo; idx++) {
+          productsPerPage.push(products[idx]);
+        }
+        return productsPerPage;
+      }
+      throw new Error(
+        "이보다 적은 페이지 수로 모든 상품을 나타낼 수 있습니다.",
+      );
+    }
+
     return products;
   }
 
   // 상품 카테고리별 조회
-  async getProductsByCategory(id) {
+  async getProductsByCategory(countPerPage, pageNo, id) {
     const category = await this.categoryModel.findOne({ _id: id });
     // 카테고리가 없다면
     if (!category) {
@@ -86,6 +107,27 @@ class ProductService {
     const products = await this.productModel
       .find({ categoryId: id })
       .populate("categoryId");
+
+    if (pageNo > 0) {
+      const totalCount = products.length;
+      const startNo = (pageNo - 1) * countPerPage;
+      let endNo = pageNo * countPerPage - 1;
+      if (endNo > totalCount - 1) {
+        endNo = totalCount - 1;
+      }
+
+      const productsPerPage = [];
+      if (startNo < totalCount) {
+        for (let idx = startNo; idx <= endNo; idx++) {
+          productsPerPage.push(products[idx]);
+        }
+        return productsPerPage;
+      }
+      throw new Error(
+        "이보다 적은 페이지 수로 모든 상품을 나타낼 수 있습니다.",
+      );
+    }
+
     return products;
   }
 

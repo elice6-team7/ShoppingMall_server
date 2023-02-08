@@ -21,11 +21,31 @@ class CategoryService {
   }
 
   // 카테고리 목록 조회
-  async getCategories() {
+  async getCategories(countPerPage, pageNo) {
     const categories = await this.categoryModel.find({});
 
     if (!categories) {
       throw new Error("어떤 카테고리도 존재하지 않습니다.");
+    }
+
+    if (pageNo > 0) {
+      const totalCount = categories.length;
+      const startNo = (pageNo - 1) * countPerPage;
+      let endNo = pageNo * countPerPage - 1;
+      if (endNo > totalCount - 1) {
+        endNo = totalCount - 1;
+      }
+
+      const categoriesPerPage = [];
+      if (startNo < totalCount) {
+        for (let idx = startNo; idx <= endNo; idx++) {
+          categoriesPerPage.push(categories[idx]);
+        }
+        return categoriesPerPage;
+      }
+      throw new Error(
+        "이보다 적은 페이지 수로 모든 카테고리를 나타낼 수 있습니다.",
+      );
     }
 
     return categories;

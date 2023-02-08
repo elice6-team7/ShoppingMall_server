@@ -16,7 +16,7 @@ class OrderService {
   }
 
   async getOrderAdmin() {
-    const orderList = await this.orderModel.find();
+    const orderList = await this.orderModel.find().populate("userId");
     return orderList;
   }
 

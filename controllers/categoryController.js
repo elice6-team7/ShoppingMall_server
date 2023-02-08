@@ -35,8 +35,8 @@ class CategoryController {
 
   async getCategory(req, res, next) {
     try {
-      const { categoryTitle } = req.params;
-      const category = await categoryService.getCategory(categoryTitle);
+      const { categoryId } = req.params;
+      const category = await categoryService.getCategory(categoryId);
       res.status(200).json(category);
     } catch (err) {
       next(err);
@@ -56,9 +56,9 @@ class CategoryController {
         throw error;
       }
 
-      const { categoryTitle } = req.params;
+      const { categoryId } = req.params;
       const { title } = req.body;
-      const result = await categoryService.setCategory(categoryTitle, title);
+      const result = await categoryService.setCategory(categoryId, title);
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -67,8 +67,8 @@ class CategoryController {
 
   async deleteCategory(req, res, next) {
     try {
-      const { categoryTitle } = req.params;
-      const result = await categoryService.deleteCategory(categoryTitle);
+      const { categoryId } = req.params;
+      const result = await categoryService.deleteCategory(categoryId);
       res.status(200).json(result);
     } catch (err) {
       next(err);

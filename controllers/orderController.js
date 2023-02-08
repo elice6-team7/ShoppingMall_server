@@ -16,13 +16,23 @@ class OrderController {
         throw error;
       }
 
-      const { orderNumber, userId, consignee, address, phoneNumber } = req.body;
+      const {
+        orderNumber,
+        userId,
+        consignee,
+        address1,
+        address2,
+        zipcode,
+        phoneNumber,
+      } = req.body;
 
       const newOrder = await orderService.addOrder({
         orderNumber,
         userId,
         consignee,
-        address,
+        address1,
+        address2,
+        zipcode,
         phoneNumber,
       });
       res.status(201).json(newOrder);
@@ -64,11 +74,14 @@ class OrderController {
       }
 
       const { orderId } = req.params;
-      const { status, consignee, address, phoneNumber } = req.body;
+      const { status, consignee, address1, address2, zipcode, phoneNumber } =
+        req.body;
       const changeInfo = {
         ...(status && { status }),
         ...(consignee && { consignee }),
-        ...(address && { address }),
+        ...(address1 && { address1 }),
+        ...(address2 && { address2 }),
+        ...(zipcode && { zipcode }),
         ...(phoneNumber && { phoneNumber }),
       };
 

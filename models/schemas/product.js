@@ -31,21 +31,54 @@ const ProductSchema = new Schema({
     required: true,
     trim: true,
   },
+  // inventory: {
+  //   type: Number,
+  //   required: true,
+  //   default: 10,
+  //   min: 0,
+  // },
   inventory: {
-    type: Number,
+    type: new Schema(
+      {
+        sizeS: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+        sizeM: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+        sizeL: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+        sizeXL: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+        size2XL: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+      },
+      { _id: false },
+    ),
     required: true,
-    default: 10,
-    min: 0,
   },
   price: {
     type: Number,
     required: true,
     min: 0,
   },
-  searchKeywords: {
-    type: [String],
-    required: true,
-  },
+  // searchKeywords: {
+  //   type: [String],
+  //   required: true,
+  // },
 });
 
 export default ProductSchema;

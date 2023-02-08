@@ -6,17 +6,14 @@ const categoryRouter = express.Router();
 
 categoryRouter.post("/categories", isAdmin, categoryController.addCategory);
 categoryRouter.patch(
-  "/categories/:categoryTitle",
+  "/categories/:categoryId",
   isAdmin,
   categoryController.setCategory,
 );
 categoryRouter.get("/categories", categoryController.getCategories);
-categoryRouter.get(
-  "/categories/:categoryTitle",
-  categoryController.getCategory,
-);
+categoryRouter.get("/categories/:categoryId", categoryController.getCategory);
 categoryRouter.delete(
-  "/categories/:categoryTitle",
+  "/categories/:categoryId",
   isAdmin,
   categoryController.deleteCategory,
 );

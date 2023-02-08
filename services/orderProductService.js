@@ -34,7 +34,9 @@ class OrderProductService {
   }
 
   async getOrderProduct(orderId) {
-    const orderProductList = await this.orderProductModel.find({ orderId });
+    const orderProductList = await this.orderProductModel
+      .find({ orderId })
+      .populate("productId");
     return orderProductList;
   }
 

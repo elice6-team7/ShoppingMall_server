@@ -9,7 +9,7 @@ const OrderSchema = new Schema(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "users",
       required: true,
     },
     status: {
@@ -21,12 +21,24 @@ const OrderSchema = new Schema(
       type: String,
       required: true,
     },
-    address: {
+    address1: {
       type: String,
+      required: true,
+    },
+    address2: {
+      type: String,
+      required: true,
+    },
+    zipcode: {
+      type: Number,
       required: true,
     },
     phoneNumber: {
       type: Number,
+    },
+    orderProductId: {
+      type: Schema.Types.ObjectId,
+      ref: "orderProducts",
     },
   },
   { timeStamps: true },

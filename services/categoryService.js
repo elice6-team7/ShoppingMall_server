@@ -32,36 +32,36 @@ class CategoryService {
   }
 
   // 특정 카테고리 조회
-  async getCategory(title) {
-    const category = await this.categoryModel.findOne({ title });
+  async getCategory(id) {
+    const category = await this.categoryModel.findOne({ _id: id });
 
     if (!category) {
-      throw new Error(`${title} 카테고리가 존재하지 않습니다.`);
+      throw new Error(`해당 카테고리가 존재하지 않습니다.`);
     }
 
     return category;
   }
 
   // 카테고리 수정
-  async setCategory(title, updatedTitle) {
-    const category = await this.categoryModel.findOne({ title });
+  async setCategory(id, title) {
+    const category = await this.categoryModel.findOne({ _id: id });
 
     if (!category) {
-      throw new Error(`${title} 카테고리가 존재하지 않습니다.`);
+      throw new Error(`해당 카테고리가 존재하지 않습니다.`);
     }
 
-    if (title !== updatedTitle) {
-      const founded = await this.categoryModel.findOne({ title: updatedTitle });
+    if (category.title !== title) {
+      const founded = await this.categoryModel.findOne({ title });
       if (founded) {
         throw new Error(
-          `${updatedTitle} 이름의 카테고리가 존재합니다. 다른 이름으로 수정해주세요.`,
+          `${title} 이름의 카테고리가 존재합니다. 다른 이름으로 수정해주세요.`,
         );
       }
     }
 
     const updated = await this.categoryModel.updateOne(
-      { title },
-      { $set: { title: updatedTitle } },
+      { _id: id },
+      { $set: { title } },
     );
 
     let result = `수정이 완료 되었습니다.`;
@@ -72,22 +72,20 @@ class CategoryService {
   }
 
   // 카테고리 삭제
-  async deleteCategory(title) {
-    const category = await this.categoryModel.findOne({ title });
+  async deleteCategory(id) {
+    const category = await this.categoryModel.findOne({ _id: id });
     if (!category) {
-      throw new Error(`${title} 카테고리가 존재하지 않습니다.`);
+      throw new Error(`해당 카테고리가 존재하지 않습니다.`);
     }
 
-    const product = await this.productModel.findOne({
-      categoryId: category.id,
-    });
+    const { title } = category;
+    const product = await this.productModel.findOne({ categoryId: id });
+
     if (product) {
       throw new Error(`${title} 카테고리에 제품이 있어 삭제가 불가합니다.`);
     }
 
-    const { deletedCount } = await this.categoryModel.deleteOne({
-      _id: category.id,
-    });
+    const { deletedCount } = await this.categoryModel.deleteOne({ _id: id });
     if (deletedCount === 0) {
       throw new Error(`${title} 카테고리 삭제에 실패했습니다.`);
     }

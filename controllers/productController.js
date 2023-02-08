@@ -59,7 +59,7 @@ class ProductController {
         throw error;
       }
 
-      const { productTitle } = req.params;
+      const { productId } = req.params;
       const {
         title,
         categoryId,
@@ -69,10 +69,10 @@ class ProductController {
         imageUrl,
         inventory,
         price,
-        searchKeywords,
+        // searchKeywords,
       } = req.body;
 
-      const result = await productService.setProduct(productTitle, {
+      const result = await productService.setProduct(productId, {
         title,
         categoryId,
         manufacturer,
@@ -81,7 +81,7 @@ class ProductController {
         imageUrl,
         inventory,
         price,
-        searchKeywords,
+        // searchKeywords,
       });
 
       res.status(200).json(result);
@@ -101,10 +101,8 @@ class ProductController {
 
   async getProductsByCategory(req, res, next) {
     try {
-      const { categoryTitle } = req.params;
-      const products = await productService.getProductsByCategory(
-        categoryTitle,
-      );
+      const { categoryId } = req.params;
+      const products = await productService.getProductsByCategory(categoryId);
       res.status(200).json(products);
     } catch (err) {
       next(err);
@@ -113,8 +111,8 @@ class ProductController {
 
   async getProduct(req, res, next) {
     try {
-      const { productTitle } = req.params;
-      const productData = await productService.getProduct(productTitle);
+      const { productId } = req.params;
+      const productData = await productService.getProduct(productId);
       res.status(200).json(productData);
     } catch (err) {
       next(err);
@@ -123,8 +121,8 @@ class ProductController {
 
   async deleteProduct(req, res, next) {
     try {
-      const { productTitle } = req.params;
-      const result = await productService.deleteProduct(productTitle);
+      const { productId } = req.params;
+      const result = await productService.deleteProduct(productId);
       res.status(200).json(result);
     } catch (err) {
       next(err);

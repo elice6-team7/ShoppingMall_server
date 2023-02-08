@@ -6,18 +6,18 @@ const productRouter = express.Router();
 
 productRouter.post("/products/add", isAdmin, productController.addProduct);
 productRouter.patch(
-  "/products/:productTitle",
+  "/products/:productId",
   isAdmin,
   productController.setProduct,
 );
 productRouter.get("/products", productController.getProducts);
 productRouter.get(
-  "/products/category/:categoryTitle",
+  "/products/category/:categoryId",
   productController.getProductsByCategory,
 );
-productRouter.get("/products/:productTitle", productController.getProduct);
+productRouter.get("/products/:productId", productController.getProduct);
 productRouter.delete(
-  "/products/:productTitle",
+  "/products/:productId",
   isAdmin,
   productController.deleteProduct,
 );

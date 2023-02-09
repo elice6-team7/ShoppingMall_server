@@ -45,7 +45,7 @@ app.use("/api", orderProductRouter);
 // app.use("/", indexRouter);
 
 app.get("/", (req, res) => {
-  res.send("<h1>백엔드 페이지, /api/...<h1>");
+  res.send("<h1>백엔드 페이지, /api/....<h1>");
 });
 
 // DB 만들고 연결할 주소

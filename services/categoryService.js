@@ -28,10 +28,28 @@ class CategoryService {
       return null;
     }
 
-    return categories;
+    categories.forEach(async category => {
+      const founded = await this.productModel.findOne({
+        categoryId: category.id,
+      });
+      if (founded) {
+        await this.categoryModel.updateOne(
+          { _id: category.id },
+          { $set: { empty: false } },
+        );
+      } else {
+        await this.categoryModel.updateOne(
+          { _id: category.id },
+          { $set: { empty: true } },
+        );
+      }
+    });
+
+    const updatedCategories = await this.categoryModel.find({});
+    return updatedCategories;
   }
 
-  // 페이지 별 카테고리 목록 조회
+  // 페이지 별 카테고리 목록 조회 - 관리자 참고
   async getCategoriesPerPage(pageNo) {
     const categories = await this.categoryModel.find({});
 

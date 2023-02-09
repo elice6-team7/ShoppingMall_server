@@ -4,6 +4,12 @@ class CategoryService {
   constructor(productModel, categoryModel) {
     this.productModel = productModel;
     this.categoryModel = categoryModel;
+    this.addCategory = this.addCategory.bind(this);
+    this.getCategories = this.getCategories.bind(this);
+    this.getCategoriesPerPage = this.getCategoriesPerPage.bind(this);
+    this.getCategory = this.getCategory.bind(this);
+    this.setCategory = this.setCategory.bind(this);
+    this.deleteCategory = this.deleteCategory.bind(this);
   }
 
   // 카테고리 추가

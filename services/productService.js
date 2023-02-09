@@ -4,6 +4,15 @@ class ProductService {
   constructor(productModel, categoryModel) {
     this.productModel = productModel;
     this.categoryModel = categoryModel;
+    this.addProduct = this.addProduct.bind(this);
+    this.setProduct = this.setProduct.bind(this);
+    this.getProducts = this.getProducts.bind(this);
+    this.getProductsPerPage = this.getProductsPerPage.bind(this);
+    this.getProductsByCategory = this.getProductsByCategory.bind(this);
+    this.getProductsByCategoryPerPage =
+      this.getProductsByCategoryPerPage.bind(this);
+    this.getProduct = this.getProduct.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this);
   }
 
   // 상품 추가

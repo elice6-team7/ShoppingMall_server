@@ -17,8 +17,8 @@ class OrderController {
       }
 
       const {
-        orderNumber,
         userId,
+        totalPrice,
         consignee,
         address1,
         address2,
@@ -27,8 +27,8 @@ class OrderController {
       } = req.body;
 
       const newOrder = await orderService.addOrder({
-        orderNumber,
         userId,
+        totalPrice,
         consignee,
         address1,
         address2,

@@ -6,12 +6,6 @@ class OrderService {
   }
 
   async addOrder(orderInfo) {
-    const checkOverlap = await this.orderModel.findOne({
-      orderNumber: orderInfo.orderNumber,
-    });
-    if (checkOverlap) {
-      throw new Error("주문 번호가 중복되었습니다.");
-    }
     const createdNewOrder = await this.orderModel.create(orderInfo);
     return createdNewOrder;
   }

@@ -47,7 +47,6 @@ class OrderProductService {
 
   async deleteOrderProduct(orderId) {
     const orderProductList = await this.orderProductModel.find({ orderId });
-    const { orderNumber } = await this.orderModel.findOne({ _id: orderId });
     let deletedCountAll = 0;
 
     // eslint-disable-next-line no-restricted-syntax
@@ -80,10 +79,10 @@ class OrderProductService {
     }
 
     if (deletedCountAll === 0) {
-      throw new Error(`${orderNumber}번 주문에서 삭제할 상품이 없습니다.`);
+      throw new Error("현재 주문에서 삭제할 상품이 없습니다.");
     }
 
-    return { result: `${orderNumber}번 주문 상품 삭제 완료` };
+    return { result: "상품 삭제 완료" };
   }
 }
 

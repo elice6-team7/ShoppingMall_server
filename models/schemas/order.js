@@ -2,14 +2,13 @@ import { Schema } from "mongoose";
 
 const OrderSchema = new Schema(
   {
-    orderNumber: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
       required: true,
     },
     status: {

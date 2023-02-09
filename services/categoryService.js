@@ -28,25 +28,23 @@ class CategoryService {
       return null;
     }
 
-    categories.forEach(async category => {
-      const founded = await this.productModel.findOne({
-        categoryId: category.id,
-      });
-      if (founded) {
-        await this.categoryModel.updateOne(
-          { _id: category.id },
-          { $set: { empty: false } },
-        );
-      } else {
-        await this.categoryModel.updateOne(
-          { _id: category.id },
-          { $set: { empty: true } },
-        );
-      }
-    });
+    const checkEmpty = await Promise.all(
+      categories.map(async category => {
+        const founded = await this.productModel.findOne({
+          categoryId: category.id,
+        });
+        if (!founded) {
+          return true;
+        }
+        return false;
+      }),
+    );
 
-    const updatedCategories = await this.categoryModel.find({});
-    return updatedCategories;
+    const result = categories.map((category, idx) => [
+      category,
+      checkEmpty[idx],
+    ]);
+    return result;
   }
 
   // 페이지 별 카테고리 목록 조회 - 관리자 참고

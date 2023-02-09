@@ -3,6 +3,15 @@ import { validationResult } from "express-validator";
 import { categoryService } from "../services";
 
 class CategoryController {
+  constructor(service) {
+    this.service = service;
+    this.addCategory = this.addCategory.bind(this);
+    this.getCategories = this.getCategories.bind(this);
+    this.getCategory = this.getCategory.bind(this);
+    this.setCategory = this.setCategory.bind(this);
+    this.deleteCategory = this.deleteCategory.bind(this);
+  }
+
   async addCategory(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
@@ -89,6 +98,6 @@ class CategoryController {
   }
 }
 
-const categoryController = new CategoryController();
+const categoryController = new CategoryController(categoryService);
 
 export { categoryController };

@@ -3,6 +3,16 @@ import { validationResult } from "express-validator";
 import { productService } from "../services";
 
 class ProductController {
+  constructor(service) {
+    this.service = service;
+    this.addProduct = this.addProduct.bind(this);
+    this.setProduct = this.setProduct.bind(this);
+    this.getProducts = this.getProducts.bind(this);
+    this.getProductsByCategory = this.getProductsByCategory.bind(this);
+    this.getProduct = this.getProduct.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this);
+  }
+
   async addProduct(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
@@ -28,7 +38,7 @@ class ProductController {
         searchKeywords,
       } = req.body;
 
-      const newProduct = await productService.addProduct({
+      const newProduct = await this.service.addProduct({
         title,
         categoryId,
         manufacturer,
@@ -72,7 +82,7 @@ class ProductController {
         // searchKeywords,
       } = req.body;
 
-      const result = await productService.setProduct(productId, {
+      const result = await this.service.setProduct(productId, {
         title,
         categoryId,
         manufacturer,
@@ -95,7 +105,7 @@ class ProductController {
       let { pageNo } = req.query;
       let products = [];
       if (!pageNo) {
-        products = await productService.getProducts();
+        products = await this.service.getProducts();
       } else {
         pageNo = Number(pageNo);
         if (Number.isNaN(pageNo)) {
@@ -104,7 +114,7 @@ class ProductController {
         if (pageNo < 1) {
           throw new Error("페이지 번호는 0보다 커야 합니다.");
         }
-        products = await productService.getProductsPerPage(pageNo);
+        products = await this.service.getProductsPerPage(pageNo);
       }
       res.status(200).json(products);
     } catch (err) {
@@ -112,14 +122,13 @@ class ProductController {
     }
   }
 
-  //
   async getProductsByCategory(req, res, next) {
     try {
       let { pageNo } = req.query;
       const { categoryId } = req.params;
       let products = [];
       if (!pageNo) {
-        products = await productService.getProductsByCategory(categoryId);
+        products = await this.service.getProductsByCategory(categoryId);
       } else {
         pageNo = Number(pageNo);
         if (Number.isNaN(pageNo)) {
@@ -128,7 +137,7 @@ class ProductController {
         if (pageNo < 1) {
           throw new Error("페이지 번호는 0보다 커야 합니다.");
         }
-        products = await productService.getProductsByCategoryPerPage(
+        products = await this.service.getProductsByCategoryPerPage(
           pageNo,
           categoryId,
         );
@@ -142,7 +151,7 @@ class ProductController {
   async getProduct(req, res, next) {
     try {
       const { productId } = req.params;
-      const productData = await productService.getProduct(productId);
+      const productData = await this.service.getProduct(productId);
       res.status(200).json(productData);
     } catch (err) {
       next(err);
@@ -152,7 +161,7 @@ class ProductController {
   async deleteProduct(req, res, next) {
     try {
       const { productId } = req.params;
-      const result = await productService.deleteProduct(productId);
+      const result = await this.service.deleteProduct(productId);
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -160,6 +169,6 @@ class ProductController {
   }
 }
 
-const productController = new ProductController();
+const productController = new ProductController(productService);
 
 export { productController };

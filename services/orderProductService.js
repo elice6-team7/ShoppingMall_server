@@ -8,22 +8,27 @@ class OrderProductService {
   }
 
   async addOrderProduct(orderProductInfo) {
-    const { productId, productQuantity } = orderProductInfo;
+    const { productId, productQuantity, productSize } = orderProductInfo;
     const product = await this.productModel.findOne({ _id: productId });
+    const productInventory = product.inventory;
     if (!product) {
       throw new Error("주문 상품이 존재하지 않습니다.");
     }
     if (productQuantity <= 0 || productQuantity % 1 !== 0) {
       throw new Error("주문 수량이 잘못되었습니다.");
     }
-    if (product.inventory < productQuantity || product.inventory === 0) {
+    if (
+      productInventory[productSize] < productQuantity ||
+      productInventory[productSize] === 0
+    ) {
       throw new Error("상품 수량이 부족합니다.");
     }
 
-    const updateProductInventory = product.inventory - productQuantity;
+    productInventory[productSize] -= productQuantity;
+
     await this.productModel.updateOne(
       { _id: productId },
-      { inventory: updateProductInventory },
+      { $set: { inventory: productInventory } },
     );
 
     const createdNewOrderProduct = await this.orderProductModel.create(
@@ -45,20 +50,25 @@ class OrderProductService {
     const { orderNumber } = await this.orderModel.findOne({ _id: orderId });
     let deletedCountAll = 0;
 
-    for (let orderProduct of orderProductList) {
-      const { productId, productQuantity } = orderProduct;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const orderProduct of orderProductList) {
+      const { productId, productQuantity, productSize } = orderProduct;
       const product = await this.productModel.findOne({ _id: productId });
+      const productInventory = product.inventory;
 
       if (!product) {
         throw new Error("주문 상품이 존재하지 않습니다.");
       }
 
-      const updateProductInventory = product.inventory + productQuantity;
+      productInventory[productSize] += productQuantity;
+
+      // eslint-disable-next-line no-await-in-loop
       await this.productModel.updateOne(
         { _id: productId },
-        { inventory: updateProductInventory },
+        { $set: { inventory: productInventory } },
       );
 
+      // eslint-disable-next-line no-await-in-loop
       const { deletedCount } = await this.orderProductModel.deleteOne({
         _id: orderProduct._id,
       });

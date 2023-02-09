@@ -4,6 +4,7 @@ class OrderService {
   constructor(orderModel) {
     this.orderModel = orderModel;
   }
+
   async addOrder(orderInfo) {
     const checkOverlap = await this.orderModel.findOne({
       orderNumber: orderInfo.orderNumber,

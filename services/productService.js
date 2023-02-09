@@ -8,12 +8,18 @@ class ProductService {
 
   // 상품 추가
   async addProduct(productInfo) {
-    const { title } = productInfo;
+    const { title, categoryId } = productInfo;
 
     // 상품 중복 확인
     const founded = await this.productModel.findOne({ title });
     if (founded) {
       throw new Error(`${title} 상품이 존재합니다.`);
+    }
+
+    // 없는 카테고리에 추가 불가능
+    const category = await this.categoryModel.findOne({ _id: categoryId });
+    if (!category) {
+      throw new Error(`상품을 추가하려는 카테고리가 없습니다.`);
     }
 
     // DB 저장

@@ -10,7 +10,6 @@ categoryRouter.patch(
   isAdmin,
   categoryController.setCategory,
 );
-// 페이지네이션 구현하기 -> 무한스크롤로 바꿀까?
 categoryRouter.get("/categories", categoryController.getCategories);
 categoryRouter.get("/categories/:categoryId", categoryController.getCategory);
 categoryRouter.delete(

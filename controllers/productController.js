@@ -92,79 +92,47 @@ class ProductController {
 
   async getProducts(req, res, next) {
     try {
-      let countPerPage = req.query.countperpage;
-      let pageNo = req.query.pageno;
-
-      // countPerPage default=10
-      if (!countPerPage) {
-        countPerPage = 10;
-      } else {
-        countPerPage = parseInt(countPerPage);
-      }
-      if (Number.isNaN(countPerPage)) {
-        throw new Error("제대로 된 페이지 별 상품 수를 입력해주세요.");
-      }
-      if (countPerPage < 1) {
-        throw new Error("페이지에 상품을 적어도 1개 이상 띄워야 합니다.");
-      }
-
-      // pageNo=0: total, pageNo>=1: documents per page
+      let { pageNo } = req.query;
+      let products = [];
       if (!pageNo) {
-        pageNo = 0;
+        products = await productService.getProducts();
       } else {
-        pageNo = parseInt(pageNo);
+        pageNo = Number(pageNo);
+        if (Number.isNaN(pageNo)) {
+          throw new Error("제대로 된 페이지 번호를 입력해주세요.");
+        }
+        if (pageNo < 1) {
+          throw new Error("페이지 번호는 0보다 커야 합니다.");
+        }
+        products = await productService.getProductsPerPage(pageNo);
       }
-      if (Number.isNaN(pageNo)) {
-        throw new Error("제대로 된 페이지 번호를 입력해주세요.");
-      }
-      if (pageNo < 0) {
-        throw new Error("페이지 번호는 0보다 크거나 같아야 합니다.");
-      }
-
-      const products = await productService.getProducts(countPerPage, pageNo);
       res.status(200).json(products);
     } catch (err) {
       next(err);
     }
   }
 
+  //
   async getProductsByCategory(req, res, next) {
     try {
-      let countPerPage = req.query.countperpage;
-      let pageNo = req.query.pageno;
-
-      // countPerPage default=10
-      if (!countPerPage) {
-        countPerPage = 10;
-      } else {
-        countPerPage = parseInt(countPerPage);
-      }
-      if (Number.isNaN(countPerPage)) {
-        throw new Error("제대로 된 페이지 별 상품 수를 입력해주세요.");
-      }
-      if (countPerPage < 1) {
-        throw new Error("페이지에 상품을 적어도 1개 이상 띄워야 합니다.");
-      }
-
-      // pageNo=0: total, pageNo>=1: documents per page
-      if (!pageNo) {
-        pageNo = 0;
-      } else {
-        pageNo = parseInt(pageNo);
-      }
-      if (Number.isNaN(pageNo)) {
-        throw new Error("제대로 된 페이지 번호를 입력해주세요.");
-      }
-      if (pageNo < 0) {
-        throw new Error("페이지 번호는 0보다 크거나 같아야 합니다.");
-      }
-
+      let { pageNo } = req.query;
       const { categoryId } = req.params;
-      const products = await productService.getProductsByCategory(
-        countPerPage,
-        pageNo,
-        categoryId,
-      );
+      let products = [];
+      if (!pageNo) {
+        products = await productService.getProductsByCategory(categoryId);
+      } else {
+        pageNo = Number(pageNo);
+        if (Number.isNaN(pageNo)) {
+          throw new Error("제대로 된 페이지 번호를 입력해주세요.");
+        }
+        if (pageNo < 1) {
+          throw new Error("페이지 번호는 0보다 커야 합니다.");
+        }
+        products = await productService.getProductsByCategoryPerPage(
+          pageNo,
+          categoryId,
+        );
+      }
       res.status(200).json(products);
     } catch (err) {
       next(err);

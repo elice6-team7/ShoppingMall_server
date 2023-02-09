@@ -25,7 +25,7 @@ class CategoryService {
     const categories = await this.categoryModel.find({});
 
     if (!categories) {
-      throw new Error("어떤 카테고리도 존재하지 않습니다.");
+      return null;
     }
 
     return categories;
@@ -36,7 +36,7 @@ class CategoryService {
     const categories = await this.categoryModel.find({});
 
     if (!categories) {
-      throw new Error("어떤 카테고리도 존재하지 않습니다.");
+      return null;
     }
 
     // countPerPage default=12
@@ -46,7 +46,7 @@ class CategoryService {
 
     const startNo = (pageNo - 1) * countPerPage;
     if (startNo >= totalCount) {
-      throw new Error("상품 수량 대비 페이지 번호가 큽니다.");
+      throw new Error("카테고리 수량 대비 페이지 번호가 큽니다.");
     }
 
     let endNo = pageNo * countPerPage - 1;

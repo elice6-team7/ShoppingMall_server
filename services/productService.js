@@ -71,34 +71,60 @@ class ProductService {
   }
 
   // 상품 전체 조회
-  async getProducts(countPerPage, pageNo) {
+  async getProducts() {
     const products = await this.productModel.find({}).populate("categoryId");
 
-    if (pageNo > 0) {
-      const totalCount = products.length;
-      const startNo = (pageNo - 1) * countPerPage;
-      let endNo = pageNo * countPerPage - 1;
-      if (endNo > totalCount - 1) {
-        endNo = totalCount - 1;
-      }
-
-      const productsPerPage = [];
-      if (startNo < totalCount) {
-        for (let idx = startNo; idx <= endNo; idx++) {
-          productsPerPage.push(products[idx]);
-        }
-        return productsPerPage;
-      }
-      throw new Error(
-        "이보다 적은 페이지 수로 모든 상품을 나타낼 수 있습니다.",
-      );
+    if (!products) {
+      return null;
     }
 
     return products;
   }
 
+  // 페이지 별 상품 목록 조회
+  async getProductsPerPage(pageNo) {
+    const products = await this.productModel.find({}).populate("categoryId");
+
+    if (!products) {
+      return null;
+    }
+
+    // countPerPage default=12
+    const countPerPage = 12;
+
+    const totalCount = products.length;
+
+    const startNo = (pageNo - 1) * countPerPage;
+    if (startNo >= totalCount) {
+      throw new Error("상품 수량 대비 페이지 번호가 큽니다.");
+    }
+
+    let endNo = pageNo * countPerPage - 1;
+    if (endNo > totalCount - 1) {
+      endNo = totalCount - 1;
+    }
+
+    const productsPerPage = [];
+    for (let idx = startNo; idx <= endNo; idx++) {
+      productsPerPage.push(products[idx]);
+    }
+    return productsPerPage;
+  }
+
   // 상품 카테고리별 조회
-  async getProductsByCategory(countPerPage, pageNo, id) {
+  async getProductsByCategory(id) {
+    const category = await this.categoryModel.findOne({ _id: id });
+    // 카테고리가 없다면
+    if (!category) {
+      throw new Error(`해당 카테고리가 존재하지 않습니다.`);
+    }
+    const products = await this.productModel
+      .find({ categoryId: id })
+      .populate("categoryId");
+    return products;
+  }
+
+  async getProductsByCategoryPerPage(pageNo, id) {
     const category = await this.categoryModel.findOne({ _id: id });
     // 카테고리가 없다면
     if (!category) {
@@ -108,27 +134,26 @@ class ProductService {
       .find({ categoryId: id })
       .populate("categoryId");
 
-    if (pageNo > 0) {
-      const totalCount = products.length;
-      const startNo = (pageNo - 1) * countPerPage;
-      let endNo = pageNo * countPerPage - 1;
-      if (endNo > totalCount - 1) {
-        endNo = totalCount - 1;
-      }
+    // countPerPage default=12
+    const countPerPage = 12;
 
-      const productsPerPage = [];
-      if (startNo < totalCount) {
-        for (let idx = startNo; idx <= endNo; idx++) {
-          productsPerPage.push(products[idx]);
-        }
-        return productsPerPage;
-      }
-      throw new Error(
-        "이보다 적은 페이지 수로 모든 상품을 나타낼 수 있습니다.",
-      );
+    const totalCount = products.length;
+
+    const startNo = (pageNo - 1) * countPerPage;
+    if (startNo >= totalCount) {
+      throw new Error("상품 수량 대비 페이지 번호가 큽니다.");
     }
 
-    return products;
+    let endNo = pageNo * countPerPage - 1;
+    if (endNo > totalCount - 1) {
+      endNo = totalCount - 1;
+    }
+
+    const productsPerPage = [];
+    for (let idx = startNo; idx <= endNo; idx++) {
+      productsPerPage.push(products[idx]);
+    }
+    return productsPerPage;
   }
 
   // 특정 상품 조회

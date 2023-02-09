@@ -16,6 +16,10 @@ const OrderProductSchema = new Schema({
     required: true,
     default: 1,
   },
+  productSize: {
+    type: String,
+    required: true,
+  },
 });
 
 export default OrderProductSchema;

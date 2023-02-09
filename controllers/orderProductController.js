@@ -16,12 +16,13 @@ class OrderProductController {
         throw error;
       }
 
-      const { orderId, productId, productQuantity } = req.body;
+      const { orderId, productId, productQuantity, productSize } = req.body;
 
       const newOrderProduct = await orderProductService.addOrderProduct({
         orderId,
         productId,
         productQuantity,
+        productSize,
       });
       res.status(201).json(newOrderProduct);
     } catch (err) {

@@ -96,7 +96,6 @@ class OrderController {
     try {
       const { orderId } = req.params;
       const deleteResult = await orderService.deleteOrder(orderId);
-
       res.status(200).json(deleteResult);
     } catch (err) {
       next(err);

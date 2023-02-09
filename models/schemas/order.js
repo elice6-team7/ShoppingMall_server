@@ -41,7 +41,7 @@ const OrderSchema = new Schema(
       ref: "orderProducts",
     },
   },
-  { timeStamps: true },
+  { timestamps: true },
 );
 
 export default OrderSchema;

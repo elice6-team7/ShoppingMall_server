@@ -11,14 +11,22 @@ class OrderProductService {
   }
 
   async addOrderProduct(orderProductInfo) {
-    const { productId, productQuantity, productSize } = orderProductInfo;
+    const { orderId, productId, productQuantity, productSize } =
+      orderProductInfo;
     const product = await this.productModel.findOne({ _id: productId });
+    const order = await this.orderModel.findOne({ _id: orderId });
     const productInventory = product.inventory;
+    if (!order) {
+      throw new Error("해당 주문이 존재하지 않습니다.");
+    }
     if (!product) {
       throw new Error("주문 상품이 존재하지 않습니다.");
     }
     if (productQuantity <= 0 || productQuantity % 1 !== 0) {
       throw new Error("주문 수량이 잘못되었습니다.");
+    }
+    if (!productInventory[productSize]) {
+      throw new Error("상품 사이즈 정보가 잘못 되었습니다.");
     }
     if (
       productInventory[productSize] < productQuantity ||

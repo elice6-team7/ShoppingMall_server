@@ -35,20 +35,7 @@ class CategoryController {
 
   async getCategories(req, res, next) {
     try {
-      let { pageNo } = req.query;
-      let categories = [];
-      if (!pageNo) {
-        categories = await categoryService.getCategories();
-      } else {
-        pageNo = Number(pageNo);
-        if (Number.isNaN(pageNo)) {
-          throw new Error("제대로 된 페이지 번호를 입력해주세요.");
-        }
-        if (pageNo < 1) {
-          throw new Error("페이지 번호는 0보다 커야 합니다.");
-        }
-        categories = await categoryService.getCategoriesPerPage(pageNo);
-      }
+      const categories = await categoryService.getCategories();
       res.status(200).json(categories);
     } catch (err) {
       next(err);

@@ -79,7 +79,6 @@ class ProductController {
         imageUrl,
         inventory,
         price,
-        // searchKeywords,
       } = req.body;
 
       const result = await this.service.setProduct(productId, {
@@ -91,7 +90,6 @@ class ProductController {
         imageUrl,
         inventory,
         price,
-        // searchKeywords,
       });
 
       res.status(200).json(result);
@@ -102,20 +100,7 @@ class ProductController {
 
   async getProducts(req, res, next) {
     try {
-      let { pageNo } = req.query;
-      let products = [];
-      if (!pageNo) {
-        products = await this.service.getProducts();
-      } else {
-        pageNo = Number(pageNo);
-        if (Number.isNaN(pageNo)) {
-          throw new Error("제대로 된 페이지 번호를 입력해주세요.");
-        }
-        if (pageNo < 1) {
-          throw new Error("페이지 번호는 0보다 커야 합니다.");
-        }
-        products = await this.service.getProductsPerPage(pageNo);
-      }
+      const products = await this.service.getProducts();
       res.status(200).json(products);
     } catch (err) {
       next(err);
@@ -124,24 +109,8 @@ class ProductController {
 
   async getProductsByCategory(req, res, next) {
     try {
-      let { pageNo } = req.query;
       const { categoryId } = req.params;
-      let products = [];
-      if (!pageNo) {
-        products = await this.service.getProductsByCategory(categoryId);
-      } else {
-        pageNo = Number(pageNo);
-        if (Number.isNaN(pageNo)) {
-          throw new Error("제대로 된 페이지 번호를 입력해주세요.");
-        }
-        if (pageNo < 1) {
-          throw new Error("페이지 번호는 0보다 커야 합니다.");
-        }
-        products = await this.service.getProductsByCategoryPerPage(
-          pageNo,
-          categoryId,
-        );
-      }
+      const products = await this.service.getProductsByCategory(categoryId);
       res.status(200).json(products);
     } catch (err) {
       next(err);

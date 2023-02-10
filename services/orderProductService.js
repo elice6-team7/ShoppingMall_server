@@ -5,6 +5,9 @@ class OrderProductService {
     this.orderProductModel = orderProductModel;
     this.orderModel = orderModel;
     this.productModel = productModel;
+    this.addOrderProduct = this.addOrderProduct.bind(this);
+    this.getOrderProduct = this.getOrderProduct.bind(this);
+    this.deleteOrderProduct = this.deleteOrderProduct.bind(this);
   }
 
   async addOrderProduct(orderProductInfo) {

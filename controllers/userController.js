@@ -2,8 +2,16 @@
 import is from "@sindresorhus/is";
 import { userService } from "../services";
 import logger from "../middleware/logger";
+// const passport = require("passport"); // 카카오 로그인 도입예정
+// import passport from "passport";
+// import kakaoPassport from "passport-kakao";
+import jwt from "jsonwebtoken";
+
+// const KakaoStrategy = kakaoPassport.Strategy;
+// const KakaoStrategy = require("passport-kakao").Strategy;
 
 const appjson = "headers의 Content-Type을 application/json으로 설정해주세요";
+
 class UserController {
   async register(req, res, next) {
     try {
@@ -16,11 +24,34 @@ class UserController {
         email,
         password,
       });
+
       logger.info("회원가입 성공", { message: name });
-      res.status(201).json(newUser);
+
+      const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
+
+      const token = jwt.sign(
+        { userId: email._id, pe: email.isAdmin },
+        secretKey,
+        {
+          expiresIn: "1h",
+        },
+      );
+      const isAdmin = false;
+
+      res.status(201).json({ token, isAdmin });
+      return json(token);
     } catch (error) {
       next(error);
     }
+  }
+
+  async kakao(req, res, next) {
+    const headers = req.headers["authorization"];
+    const kakaoToken = headers.split(" ")[1];
+
+    const accessToken = await userService.kakao(kakaoToken);
+
+    return res.status(200).json({ accessToken: accessToken });
   }
 
   async login(req, res, next) {

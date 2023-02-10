@@ -3,6 +3,15 @@ import { validationResult } from "express-validator";
 import { orderService } from "../services";
 
 class OrderController {
+  constructor(service) {
+    this.service = this.service.bind(service);
+    this.addOrder = this.addOrder.bind(this);
+    this.getOrderAdmin = this.getOrderAdmin.bind(this);
+    this.getOrderUser = this.getOrderUser.bind(this);
+    this.setOrder = this.setOrder.bind(this);
+    this.deleteOrder = this.deleteOrder.bind(this);
+  }
+
   async addOrder(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
@@ -26,7 +35,7 @@ class OrderController {
         phoneNumber,
       } = req.body;
 
-      const newOrder = await orderService.addOrder({
+      const newOrder = await this.service.addOrder({
         userId,
         totalPrice,
         consignee,
@@ -43,7 +52,7 @@ class OrderController {
 
   async getOrderAdmin(req, res, next) {
     try {
-      const orderList = await orderService.getOrderAdmin();
+      const orderList = await this.service.getOrderAdmin();
       res.status(200).json(orderList);
     } catch (err) {
       next(err);
@@ -53,7 +62,7 @@ class OrderController {
   async getOrderUser(req, res, next) {
     try {
       const { userId } = req.params;
-      const orderList = await orderService.getOrderUser(userId);
+      const orderList = await this.service.getOrderUser(userId);
       res.status(200).json(orderList);
     } catch (err) {
       next(err);
@@ -85,7 +94,7 @@ class OrderController {
         ...(phoneNumber && { phoneNumber }),
       };
 
-      const changedOrder = await orderService.setOrder(orderId, changeInfo);
+      const changedOrder = await this.service.setOrder(orderId, changeInfo);
       res.status(200).json(changedOrder);
     } catch (err) {
       next(err);
@@ -95,7 +104,7 @@ class OrderController {
   async deleteOrder(req, res, next) {
     try {
       const { orderId } = req.params;
-      const deleteResult = await orderService.deleteOrder(orderId);
+      const deleteResult = await this.service.deleteOrder(orderId);
       res.status(200).json(deleteResult);
     } catch (err) {
       next(err);
@@ -103,6 +112,6 @@ class OrderController {
   }
 }
 
-const orderController = new OrderController();
+const orderController = new OrderController(orderService);
 
 export { orderController };

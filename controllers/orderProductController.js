@@ -3,6 +3,13 @@ import { validationResult } from "express-validator";
 import { orderProductService } from "../services";
 
 class OrderProductController {
+  constructor(service) {
+    this.service = service;
+    this.addOrderProduct = this.addOrderProduct.bind(this);
+    this.getOrderProduct = this.getOrderProduct.bind(this);
+    this.deleteOrderProduct = this.deleteOrderProduct.bind(this);
+  }
+
   async addOrderProduct(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
@@ -18,7 +25,7 @@ class OrderProductController {
 
       const { orderId, productId, productQuantity, productSize } = req.body;
 
-      const newOrderProduct = await orderProductService.addOrderProduct({
+      const newOrderProduct = await this.service.addOrderProduct({
         orderId,
         productId,
         productQuantity,
@@ -33,7 +40,7 @@ class OrderProductController {
   async getOrderProduct(req, res, next) {
     try {
       const { orderId } = req.params;
-      const productList = await orderProductService.getOrderProduct(orderId);
+      const productList = await this.service.getOrderProduct(orderId);
       res.status(200).json(productList);
     } catch (err) {
       next(err);
@@ -43,9 +50,7 @@ class OrderProductController {
   async deleteOrderProduct(req, res, next) {
     try {
       const { orderId } = req.params;
-      const deleteResult = await orderProductService.deleteOrderProduct(
-        orderId,
-      );
+      const deleteResult = await this.service.deleteOrderProduct(orderId);
 
       res.status(200).json(deleteResult);
     } catch (err) {
@@ -54,6 +59,6 @@ class OrderProductController {
   }
 }
 
-const orderProductController = new OrderProductController();
+const orderProductController = new OrderProductController(orderProductService);
 
 export { orderProductController };

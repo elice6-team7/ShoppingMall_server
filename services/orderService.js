@@ -3,6 +3,11 @@ import { Order } from "../models";
 class OrderService {
   constructor(orderModel) {
     this.orderModel = orderModel;
+    this.addOrder = this.addOrder.bind(this);
+    this.getOrderAdmin = this.getOrderAdmin.bind(this);
+    this.getOrderUser = this.getOrderUser.bind(this);
+    this.setOrder = this.setOrder.bind(this);
+    this.deleteOrder = this.deleteOrder.bind(this);
   }
 
   async addOrder(orderInfo) {

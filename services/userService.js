@@ -46,7 +46,7 @@ class UserService {
 
     // eslint-disable-next-line no-underscore-dangle
     const token = jwt.sign({ userId: user._id, pe: user.isAdmin }, secretKey, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
     const isAdmin = user.isAdmin === true;
 

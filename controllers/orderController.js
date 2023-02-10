@@ -4,7 +4,7 @@ import { orderService } from "../services";
 
 class OrderController {
   constructor(service) {
-    this.service = this.service.bind(service);
+    this.service = service;
     this.addOrder = this.addOrder.bind(this);
     this.getOrderAdmin = this.getOrderAdmin.bind(this);
     this.getOrderUser = this.getOrderUser.bind(this);

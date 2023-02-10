@@ -6,7 +6,6 @@ class CategoryService {
     this.categoryModel = categoryModel;
     this.addCategory = this.addCategory.bind(this);
     this.getCategories = this.getCategories.bind(this);
-    this.getCategoriesPerPage = this.getCategoriesPerPage.bind(this);
     this.getCategory = this.getCategory.bind(this);
     this.setCategory = this.setCategory.bind(this);
     this.deleteCategory = this.deleteCategory.bind(this);
@@ -51,36 +50,6 @@ class CategoryService {
       checkEmpty[idx],
     ]);
     return result;
-  }
-
-  // 페이지 별 카테고리 목록 조회 - 관리자 참고
-  async getCategoriesPerPage(pageNo) {
-    const categories = await this.categoryModel.find({});
-
-    if (!categories) {
-      return null;
-    }
-
-    // countPerPage default=12
-    const countPerPage = 12;
-
-    const totalCount = categories.length;
-
-    const startNo = (pageNo - 1) * countPerPage;
-    if (startNo >= totalCount) {
-      throw new Error("카테고리 수량 대비 페이지 번호가 큽니다.");
-    }
-
-    let endNo = pageNo * countPerPage - 1;
-    if (endNo > totalCount - 1) {
-      endNo = totalCount - 1;
-    }
-
-    const categoriesPerPage = [];
-    for (let idx = startNo; idx <= endNo; idx++) {
-      categoriesPerPage.push(categories[idx]);
-    }
-    return categoriesPerPage;
   }
 
   // 특정 카테고리 조회

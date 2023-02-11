@@ -26,7 +26,13 @@ console.log(dirname, "dirname");
 app.set("port", process.env.PORT || 8001);
 
 // CORS 에러 방지
-app.use(cors());
+const options = {
+  origin: "https://shopping-mall-client-git-dev-client-elice-ai6-7team.vercel.app", // 접근 권한을 부여하는 도메인
+  credentials: true, // 응답 헤더에 Access-Control-Allow-Credentials 추가
+  optionsSuccessStatus: 200, // 응답 상태 200으로 설정
+};
+
+app.use(cors(options));
 
 // logger (morgan)
 app.use(morgan("dev"));

@@ -15,9 +15,9 @@ import {
   orderProductRouter,
 } from "./routes";
 import { errorHandler, errorLogger } from "./middleware";
+dotenv.config();
 
 // 환경변수 사용
-dotenv.config();
 const port = process.env.SERVER_PORT;
 
 const app = express();

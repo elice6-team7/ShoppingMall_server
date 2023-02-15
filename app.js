@@ -15,9 +15,9 @@ import {
   orderProductRouter,
 } from "./routes";
 import { errorHandler, errorLogger } from "./middleware";
+dotenv.config();
 
 // 환경변수 사용
-dotenv.config();
 const port = process.env.SERVER_PORT;
 
 const app = express();
@@ -26,6 +26,12 @@ console.log(dirname, "dirname");
 app.set("port", process.env.PORT || 8001);
 
 // CORS 에러 방지
+// const options = {
+  // origin: "https://shopping-mall-client-git-dev-client-elice-ai6-7team.vercel.app", // 접근 권한을 부여하는 도메인
+  // credentials: true, // 응답 헤더에 Access-Control-Allow-Credentials 추가
+  // optionsSuccessStatus: 200, // 응답 상태 200으로 설정
+// };
+
 app.use(cors());
 
 // logger (morgan)
@@ -45,7 +51,7 @@ app.use("/api", orderProductRouter);
 // app.use("/", indexRouter);
 
 app.get("/", (req, res) => {
-  res.send("<h1>백엔드 페이지, /api/....<h1>");
+  res.send("<h1>백엔드 페이지, /api/..<h1>");
 });
 
 // DB 만들고 연결할 주소

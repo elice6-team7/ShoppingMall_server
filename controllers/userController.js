@@ -45,14 +45,14 @@ class UserController {
     }
   }
 
-  async kakao(req, res, next) {
-    const headers = req.headers["authorization"];
-    const kakaoToken = headers.split(" ")[1];
+  // async kakao(req, res, next) {
+  //   const headers = req.headers["authorization"];
+  //   const kakaoToken = headers.split(" ")[1];
 
-    const accessToken = await userService.kakao(kakaoToken);
+  //   const accessToken = await userService.kakao(kakaoToken);
 
-    return res.status(200).json({ accessToken: accessToken });
-  }
+  //   return res.status(200).json({ accessToken: accessToken });
+  // }
 
   async login(req, res, next) {
     try {

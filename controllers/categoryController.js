@@ -26,7 +26,7 @@ class CategoryController {
       }
 
       const { title } = req.body;
-      const newCategory = await categoryService.addCategory({ title });
+      const newCategory = await this.service.addCategory({ title });
       res.status(201).json(newCategory);
     } catch (err) {
       next(err);
@@ -35,7 +35,7 @@ class CategoryController {
 
   async getCategories(req, res, next) {
     try {
-      const categories = await categoryService.getCategories();
+      const categories = await this.service.getCategories();
       res.status(200).json(categories);
     } catch (err) {
       next(err);
@@ -45,7 +45,7 @@ class CategoryController {
   async getCategory(req, res, next) {
     try {
       const { categoryId } = req.params;
-      const category = await categoryService.getCategory(categoryId);
+      const category = await this.service.getCategory(categoryId);
       res.status(200).json(category);
     } catch (err) {
       next(err);
@@ -67,7 +67,7 @@ class CategoryController {
 
       const { categoryId } = req.params;
       const { title } = req.body;
-      const result = await categoryService.setCategory(categoryId, title);
+      const result = await this.service.setCategory(categoryId, title);
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -77,7 +77,7 @@ class CategoryController {
   async deleteCategory(req, res, next) {
     try {
       const { categoryId } = req.params;
-      const result = await categoryService.deleteCategory(categoryId);
+      const result = await this.service.deleteCategory(categoryId);
       res.status(200).json(result);
     } catch (err) {
       next(err);

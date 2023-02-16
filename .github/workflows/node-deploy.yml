@@ -1,0 +1,59 @@
+# This workflow will build and push a node.js application to an Azure Web App when a commit is pushed to your default branch.
+# Elice 7Team VM에 배포 자동화 워크 플로우 (VM닫혀서 현재 작동 X)
+
+name: SERVER distribute
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/ShoppingMall_server
+            git pull
+            export NVM_DIR=~/.nvm  
+            source ~/.nvm/nvm.sh 
+            npm i
+            pm2 reload all                
+                
+
+#         name: PR 감지
+#          on: 
+#           pull_request:   #pr이벤트를 감지
+#                branches:
+#                    - dev
+
+
+
+# name: Jest
+# on: push
+# jobs:
+#  test:
+#    runs-on: ubuntu-18.04
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: "버젼?"
+
+
+
+#       # 의존성 설치
+#      - name: Install Dependencies
+#        run: npm install
+
+#      # 마지막 테스트
+#      - name: Run the tests
+#        run: npm test

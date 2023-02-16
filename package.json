@@ -1,0 +1,47 @@
+{
+  "name": "7team",
+  "version": "0.0.1",
+  "main": "app.js",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node app.js",
+    "dev": "nodemon app.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@sindresorhus/is": "^5.3.0",
+    "bcrypt": "^5.1.0",
+    "commonjs-to-es-module-codemod": "^0.5.5",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.7",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^6.14.3",
+    "http-errors": "~1.6.3",
+    "jscodeshift": "^0.14.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.3",
+    "morgan": "~1.9.1",
+    "nanoid": "^3.3.4",
+    "node-fetch": "^2.6.7",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pug": "^3.0.2",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3"
+  }
+}
